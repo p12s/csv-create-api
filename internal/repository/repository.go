@@ -26,10 +26,14 @@ func createProductTable(db *sqlx.DB) {
 	  );`
 
 	statement, err := db.Prepare(query)
+	defer statement.Close() //nolint
 	if err != nil {
 		logrus.Panic("create product table error", err.Error())
 	}
-	statement.Exec()
+	_, err = statement.Exec()
+	if err != nil {
+		logrus.Panic("create product table error", err.Error())
+	}
 	logrus.Info("product table created 🗂")
 }
 
@@ -43,9 +47,13 @@ func insertSeedData(db *sqlx.DB) {
 		('Soflyy Mug 2', 7774);`
 
 	statement, err := db.Prepare(query)
+	defer statement.Close() //nolint
 	if err != nil {
 		logrus.Panic("insert product table error", err.Error())
 	}
-	statement.Exec()
+	_, err = statement.Exec()
+	if err != nil {
+		logrus.Panic("create product table error", err.Error())
+	}
 	logrus.Info("product table seed data added 🗂")
 }
