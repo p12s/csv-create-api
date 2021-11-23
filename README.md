@@ -25,7 +25,7 @@ git clone https://github.com/p12s/csv-create-api.git && cd csv-create-api
 mv .env.example .env
 docker-compose up -d
 ```
-Open in browser: http://localhost/swagger/index.html  
+Open in browser: http://localhost:8010/swagger/index.html  
 Stop:  
 ```sh
 docker-compose down
