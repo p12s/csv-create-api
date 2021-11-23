@@ -9,6 +9,7 @@ import (
 	"github.com/p12s/csv-create-api/internal/domain"
 )
 
+// Producter - repository contract
 type Producter interface {
 	Create(ctx context.Context, product domain.Product) error
 	UpdateById(ctx context.Context, id int, input domain.UpdateProductInput) error
@@ -16,14 +17,17 @@ type Producter interface {
 	GetAllProducts(ctx context.Context) ([]domain.Product, error)
 }
 
+// Product - product
 type Product struct {
 	db *sqlx.DB
 }
 
+// NewProduct - constructor
 func NewProduct(db *sqlx.DB) *Product {
 	return &Product{db: db}
 }
 
+// Create - create product
 func (p *Product) Create(ctx context.Context, product domain.Product) error {
 	query := fmt.Sprintf(`INSERT INTO %s (name, price) values ($1, $2)`, productTable)
 	_, err := p.db.Exec(query, product.Name, product.Price)
@@ -34,6 +38,7 @@ func (p *Product) Create(ctx context.Context, product domain.Product) error {
 	return nil
 }
 
+// UpdateById - update product
 func (p *Product) UpdateById(ctx context.Context, id int, input domain.UpdateProductInput) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
@@ -61,12 +66,14 @@ func (p *Product) UpdateById(ctx context.Context, id int, input domain.UpdatePro
 	return err
 }
 
+// DeleteById - delete product
 func (p *Product) DeleteById(ctx context.Context, id int) error {
 	query := fmt.Sprintf(`DELETE FROM %s WHERE id = $1`, productTable)
 	_, err := p.db.Exec(query, id)
 	return err
 }
 
+// GetAllProducts - getting all products in csv-file
 func (p *Product) GetAllProducts(ctx context.Context) ([]domain.Product, error) {
 	var products []domain.Product
 	query := fmt.Sprintf(`SELECT * FROM %s`, productTable)

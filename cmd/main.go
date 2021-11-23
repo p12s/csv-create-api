@@ -15,6 +15,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// @title Product app REST-API
+// @version 0.0.1
+// @description Simple product application for adding/getting products and download CSV-file
+// @host localhost:8010
+// @BasePath /
 func main() {
 	runtime.GOMAXPROCS(1)
 	logrus.SetFormatter(new(logrus.JSONFormatter))

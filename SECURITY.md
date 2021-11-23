@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-This versions of library-rest-api currently being supported with security updates.
+This versions of this repo currently being supported with security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |

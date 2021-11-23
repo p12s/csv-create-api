@@ -5,10 +5,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// Repository - repo
 type Repository struct {
 	Producter
 }
 
+// NewRepository - constructor
 func NewRepository(db *sqlx.DB) *Repository {
 	createProductTable(db)
 	insertSeedData(db) // remove if seed data is not needed
@@ -18,12 +20,13 @@ func NewRepository(db *sqlx.DB) *Repository {
 	}
 }
 
+// createProductTable - creating memory table
 func createProductTable(db *sqlx.DB) {
 	query := `CREATE TABLE IF NOT EXISTS product (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,			
 		"name" TEXT NOT NULL,
 		"price" INTEGER DEFAULT 0
-	  );`
+	);`
 
 	statement, err := db.Prepare(query)
 	defer statement.Close() //nolint
@@ -37,6 +40,7 @@ func createProductTable(db *sqlx.DB) {
 	logrus.Info("product table created 🗂")
 }
 
+// insertSeedData - insert seeds
 func insertSeedData(db *sqlx.DB) {
 	query := `INSERT INTO product (name, price)
 		VALUES ('Soflyy T-Shirt', 42),

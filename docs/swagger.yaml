@@ -1,0 +1,109 @@
+basePath: /
+definitions:
+  domain.Product:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+    required:
+    - name
+    - price
+    type: object
+  domain.UpdateProductInput:
+    properties:
+      name:
+        type: string
+      price:
+        type: integer
+    type: object
+host: localhost:8010
+info:
+  contact: {}
+  description: Simple product application for adding/getting products and download
+    CSV-file
+  title: Product app REST-API
+  version: 0.0.1
+paths:
+  /products/:
+    get:
+      consumes:
+      - application/json
+      description: Getting all products
+      operationId: getAllProducts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Get all
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      description: Create product
+      operationId: createProduct
+      parameters:
+      - description: Product created info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Create product
+      tags:
+      - Product
+  /products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deleting product by {id}
+      operationId: deleteProduct
+      parameters:
+      - description: Product id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Delete
+      tags:
+      - Product
+    put:
+      consumes:
+      - application/json
+      description: Update product by {id}
+      operationId: updateProduct
+      parameters:
+      - description: Product id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Product updated info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UpdateProductInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Update by id
+      tags:
+      - Product
+swagger: "2.0"
