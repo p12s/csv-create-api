@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  app:
+    build: ./
+    networks:
+      - products-csv
+    ports:
+      - 8010:8010
+
+networks:
+  products-csv:
