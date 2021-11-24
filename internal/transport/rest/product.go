@@ -17,11 +17,11 @@ import (
 // @Description Create product
 // @ID createProduct
 // @Accept  json
-// @Produce  json
 // @Param input body domain.Product true "Product created info"
 // @Success 200
 // @Router /products/ [post]
 func (h *Handler) createProduct(w http.ResponseWriter, r *http.Request) {
+
 	reqBytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		ErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -48,8 +48,6 @@ func (h *Handler) createProduct(w http.ResponseWriter, r *http.Request) {
 // @Tags Product
 // @Description Deleting product by {id}
 // @ID deleteProduct
-// @Accept  json
-// @Produce  json
 // @Param id path integer true "Product id"
 // @Success 200
 // @Router /products/{id} [delete]
@@ -74,7 +72,6 @@ func (h *Handler) deleteProduct(w http.ResponseWriter, r *http.Request) {
 // @Tags Product
 // @Description Getting all products
 // @ID getAllProducts
-// @Accept  json
 // @Produce  json
 // @Success 200
 // @Router /products/ [get]
@@ -100,7 +97,6 @@ func (h *Handler) getAllProducts(w http.ResponseWriter, r *http.Request) {
 // @Description Update product by {id}
 // @ID updateProduct
 // @Accept  json
-// @Produce  json
 // @Param id path integer true "Product id"
 // @Param input body domain.UpdateProductInput true "Product updated info"
 // @Success 200
