@@ -31,6 +31,7 @@ func (h *Handler) InitRouter() *mux.Router {
 	r.HandleFunc("/health", h.health).Methods(http.MethodGet)
 	r.HandleFunc("/sign-up", h.signUp).Methods(http.MethodPost)
 	r.HandleFunc("/sign-in", h.signIn).Methods(http.MethodPost)
+	r.HandleFunc("/logout", h.logout).Methods(http.MethodGet)
 
 	products := r.PathPrefix("/products").Subrouter()
 	{
