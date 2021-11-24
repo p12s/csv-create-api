@@ -16,10 +16,13 @@ import (
 )
 
 // @title Product app REST-API
-// @version 0.0.1
+// @version 0.0.2
 // @description Simple product application for adding/getting products and download CSV-file
 // @host localhost:8010
 // @BasePath /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	runtime.GOMAXPROCS(1)
 	logrus.SetFormatter(new(logrus.JSONFormatter))

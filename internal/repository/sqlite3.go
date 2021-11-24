@@ -6,6 +6,7 @@ import (
 )
 
 const productTable = "product"
+const usersTable = "users"
 
 // Config - db
 type Config struct {
