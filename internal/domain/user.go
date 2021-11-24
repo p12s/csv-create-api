@@ -3,14 +3,14 @@ package domain
 import (
 	"time"
 
-	"github.com/go-playground/validator/v10"
+	"github.com/go-playground/validator/v10" //nolint
 )
 
-var validate *validator.Validate
+var validate *validator.Validate //nolint
 
 // init - init validator
 func init() {
-	validate = validator.New()
+	validate = validator.New() //nolint
 }
 
 // User

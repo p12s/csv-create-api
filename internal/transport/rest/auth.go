@@ -30,7 +30,7 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := input.Validate(); err != nil {
+	if err = input.Validate(); err != nil {
 		ErrorResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -66,7 +66,7 @@ func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := input.Validate(); err != nil {
+	if err = input.Validate(); err != nil {
 		ErrorResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -87,5 +87,5 @@ func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write(response)
+	_, _ = w.Write(response)
 }

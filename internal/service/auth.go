@@ -69,7 +69,7 @@ func (a *AuthService) GetUserByCredentials(ctx context.Context, email, password 
 		return "", fmt.Errorf("user creds wrong: %w", err)
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{ //nolint
 		Subject:   strconv.Itoa(user.Id),
 		IssuedAt:  time.Now().Unix(),
 		ExpiresAt: time.Now().Add(TIME_TO_LIVE_HOURS * time.Hour).Unix(),
