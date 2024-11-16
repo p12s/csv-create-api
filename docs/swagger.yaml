@@ -1,9 +1,20 @@
 basePath: /
 definitions:
+  domain.Credentials:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
   domain.Product:
     properties:
       id:
-        type: string
+        type: integer
       name:
         type: string
       price:
@@ -11,6 +22,21 @@ definitions:
     required:
     - name
     - price
+    type: object
+  domain.SignUpInput:
+    properties:
+      email:
+        type: string
+      name:
+        minLength: 2
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
     type: object
   domain.UpdateProductInput:
     properties:
@@ -25,12 +51,20 @@ info:
   description: Simple product application for adding/getting products and download
     CSV-file
   title: Product app REST-API
-  version: 0.0.1
+  version: 0.0.2
 paths:
+  /logout:
+    get:
+      description: Logout, expire cookies
+      operationId: logout
+      responses:
+        "200":
+          description: ""
+      summary: Logout
+      tags:
+      - Auth
   /products/:
     get:
-      consumes:
-      - application/json
       description: Getting all products
       operationId: getAllProducts
       produces:
@@ -38,6 +72,8 @@ paths:
       responses:
         "200":
           description: ""
+      security:
+      - ApiKeyAuth: []
       summary: Get all
       tags:
       - Product
@@ -53,18 +89,16 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/domain.Product'
-      produces:
-      - application/json
       responses:
         "200":
           description: ""
+      security:
+      - ApiKeyAuth: []
       summary: Create product
       tags:
       - Product
   /products/{id}:
     delete:
-      consumes:
-      - application/json
       description: Deleting product by {id}
       operationId: deleteProduct
       parameters:
@@ -73,11 +107,11 @@ paths:
         name: id
         required: true
         type: integer
-      produces:
-      - application/json
       responses:
         "200":
           description: ""
+      security:
+      - ApiKeyAuth: []
       summary: Delete
       tags:
       - Product
@@ -98,12 +132,59 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/domain.UpdateProductInput'
+      responses:
+        "200":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Update by id
+      tags:
+      - Product
+  /sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Sending data to get authentication with jwt-token
+      operationId: signIn
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Credentials'
       produces:
       - application/json
       responses:
         "200":
           description: ""
-      summary: Update by id
+      summary: Sign in
       tags:
-      - Product
+      - Auth
+  /sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Create account
+      operationId: signUp
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.SignUpInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Sign up
+      tags:
+      - Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: cookie
+    name: session_token
+    type: apiKey
 swagger: "2.0"

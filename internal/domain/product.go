@@ -2,7 +2,7 @@ package domain
 
 // Product - product
 type Product struct {
-	Id    string `csv:"-" json:"id" db:"id"`
+	Id    int    `csv:"-" json:"id" db:"id"`
 	Name  string `csv:"PRODUCT NAME" json:"name" db:"name" binding:"required"`
 	Price int    `csv:"PRICE" json:"price" db:"price" binding:"required"`
 }

@@ -11,15 +11,19 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/p12s/csv-create-api/internal/repository"
 	"github.com/p12s/csv-create-api/internal/service"
+	"github.com/p12s/csv-create-api/internal/session"
 	"github.com/p12s/csv-create-api/internal/transport/rest"
 	"github.com/sirupsen/logrus"
 )
 
 // @title Product app REST-API
-// @version 0.0.1
+// @version 0.0.3
 // @description Simple product application for adding/getting products and download CSV-file
 // @host localhost:8010
 // @BasePath /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in cookie
+// @name session_token
 func main() {
 	runtime.GOMAXPROCS(1)
 	logrus.SetFormatter(new(logrus.JSONFormatter))
@@ -34,9 +38,17 @@ func main() {
 	if err != nil {
 		logrus.Fatalf("failed to initialize db: %s\n", err.Error())
 	}
-
 	repos := repository.NewRepository(db)
-	services := service.NewService(repos)
+
+	redisClient, err := session.NewRedisClient(session.Config{
+		Url: os.Getenv("REDIS_URL"),
+	})
+	if err != nil {
+		logrus.Fatalf("failed to initialize ssession store: %s\n", err.Error())
+	}
+	sessionRepo := session.NewRepository(redisClient)
+
+	services := service.NewService(repos, sessionRepo)
 	handlers := rest.NewHandler(services)
 
 	srv := &http.Server{

@@ -23,12 +23,29 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/logout": {
+            "get": {
+                "description": "Logout, expire cookies",
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/products/": {
             "get": {
-                "description": "Getting all products",
-                "consumes": [
-                    "application/json"
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
                 ],
+                "description": "Getting all products",
                 "produces": [
                     "application/json"
                 ],
@@ -44,11 +61,13 @@ var doc = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create product",
                 "consumes": [
-                    "application/json"
-                ],
-                "produces": [
                     "application/json"
                 ],
                 "tags": [
@@ -76,11 +95,13 @@ var doc = `{
         },
         "/products/{id}": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update product by {id}",
                 "consumes": [
-                    "application/json"
-                ],
-                "produces": [
                     "application/json"
                 ],
                 "tags": [
@@ -113,13 +134,12 @@ var doc = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Deleting product by {id}",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "Product"
                 ],
@@ -140,9 +160,89 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/sign-in": {
+            "post": {
+                "description": "Sending data to get authentication with jwt-token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Sign in",
+                "operationId": "signIn",
+                "parameters": [
+                    {
+                        "description": "credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Credentials"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/sign-up": {
+            "post": {
+                "description": "Create account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Sign up",
+                "operationId": "signUp",
+                "parameters": [
+                    {
+                        "description": "credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.SignUpInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "domain.Credentials": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 6
+                }
+            }
+        },
         "domain.Product": {
             "type": "object",
             "required": [
@@ -151,13 +251,34 @@ var doc = `{
             ],
             "properties": {
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
                 },
                 "price": {
                     "type": "integer"
+                }
+            }
+        },
+        "domain.SignUpInput": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 2
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 6
                 }
             }
         },
@@ -171,6 +292,13 @@ var doc = `{
                     "type": "integer"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "session_token",
+            "in": "cookie"
         }
     }
 }`
@@ -186,7 +314,7 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "0.0.1",
+	Version:     "0.0.2",
 	Host:        "localhost:8010",
 	BasePath:    "/",
 	Schemes:     []string{},
