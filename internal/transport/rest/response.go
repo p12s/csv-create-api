@@ -1,9 +1,15 @@
 package rest
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/sirupsen/logrus"
+)
+
+const (
+	SESSION_HOUR_TTL = 12
+	COOKIE_NAME      = "session_token"
 )
 
 // ErrorResponse
@@ -13,6 +19,15 @@ func ErrorResponse(w http.ResponseWriter, statusCode int, message string) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	_, _ = w.Write([]byte(message))
+}
+
+// ErrorCookie
+func ErrorCookie(w http.ResponseWriter, err error) {
+	if errors.Is(err, http.ErrNoCookie) {
+		w.WriteHeader(http.StatusUnauthorized)
+	} else {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 }
 
 // OkResponse
